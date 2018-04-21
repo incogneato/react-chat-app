@@ -3,6 +3,19 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentChatMessages: ''
+    };
+  }
+
+  updateCurrentChatMessage(event) {
+    this.setState({
+      currentChatMessage: event.target.value
+    });
+  }
+
   render() {
     return (
       <div className="App">
