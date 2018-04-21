@@ -54,7 +54,6 @@ class App extends Component {
           <ul className='chat-logs'>
             { this.renderChatLog() }
           </ul>
-          <br />
           <input
             onKeyPress = { (e) => this.handleChatInputKeyPress(e) }
             value      = { this.state.currentChatMessage }
