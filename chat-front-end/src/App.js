@@ -7,7 +7,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentChatMessage: ''
+      currentChatMessage: '',
+      chatLogs: [] // add logs to state obj for our chat thread
     };
   }
 
@@ -22,13 +23,25 @@ class App extends Component {
     }, {
       connected: () => {},
       received: (data) => {
-        console.log(data);
+        let chatLogs = this.state.chatLogs;
+        chatLogs.push(data);
+        this.setState({ chatLogs: chatLogs }); // add our chat log to state
       },
       create: function(chatContent) {
         this.perform('create', {
           content: chatContent
         });
       }
+    });
+  }
+  renderChatLog() {
+    return this.state.chatLogs.map((el) => {
+      return (
+        <li key={`chat_${el.id}`}>
+          <span className='chat-message'>{ el.content }</span>
+          <span className='chat-created-at'>{ el.created_at }</span>
+        </li>
+      );
     });
   }
 
@@ -60,7 +73,6 @@ class App extends Component {
       currentChatMessage: event.target.value
     });
   }
-
   handleSendEvent(event) {
     event.preventDefault();
     this.chats.create(this.state.currentChatMessage);
