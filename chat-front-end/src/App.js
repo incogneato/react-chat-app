@@ -24,6 +24,8 @@ class App extends Component {
           <div className='chat-logs'>
           </div>
           <input
+            value= { this.state.currentChatMessage }
+            onChange= { (e) => this.updateCurrentChatMessage(e) }
             type='text'
             placeholder='Enter your message...'
             className='chat-input'
