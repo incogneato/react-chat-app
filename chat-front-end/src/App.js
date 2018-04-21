@@ -1,18 +1,34 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Cable from 'actioncable';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentChatMessages: ''
+      currentChatMessage: ''
     };
   }
 
-  updateCurrentChatMessage(event) {
-    this.setState({
-      currentChatMessage: event.target.value
+  componentWillMount() {
+    this.createSocket();
+  }
+
+  createSocket() {
+    let cable = Cable.createConsumer('ws://localhost:3001/cable');
+    this.chats = cable.subscriptions.create({
+      channel: 'ChatChannel'
+    }, {
+      connected: () => {},
+      received: (data) => {
+        console.log(data);
+      },
+      create: function(chatContent) {
+        this.perform('create', {
+          content: chatContent
+        });
+      }
     });
   }
 
@@ -30,12 +46,27 @@ class App extends Component {
             placeholder='Enter your message...'
             className='chat-input'
             />
-            <button className='send'>
+            <button
+              onClick={ (e) => this.handleSendEvent(e) }
+              className='send'>
               Send
             </button>
         </div>
       </div>
     );
+  }
+  updateCurrentChatMessage(event) {
+    this.setState({
+      currentChatMessage: event.target.value
+    });
+  }
+
+  handleSendEvent(event) {
+    event.preventDefault();
+    this.chats.create(this.state.currentChatMessage);
+    this.setState({
+      currentChatMessage: ''
+    });
   }
 }
 

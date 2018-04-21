@@ -25,7 +25,7 @@ module ReactRailsChatApp
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
-        resource '*', headers: :any, methods: I%[get post options]
+        resource '*', headers: :any, methods: %I[get post options]
         # ^ wide open for dev
       end
     end
