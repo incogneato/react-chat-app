@@ -64,6 +64,10 @@ class App extends Component {
               className='send'>
               Send
             </button>
+            <br>
+            <ul className='chat-logs'>
+              { this.renderChatLog() }
+            </ul>
         </div>
       </div>
     );
